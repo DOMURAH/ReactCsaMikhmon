@@ -71,7 +71,7 @@ const Login = () => {
   return (
 
         <div className='min-h-screen bg-gradient-to-r from-slate-800 to-slate-700/80 grid grid-cols-1 lg:grid-cols-2'>
-            <div className="bg-[url('fond-degrade-radial.png')] border-r border-slate-500/60 min-h-screen p-8 flex flex-col justify-center items-center">
+            {/* <div className="bg-[url('fond-degrade-radial.png')] border-r border-slate-500/60 min-h-screen p-8 flex flex-col justify-center items-center">
                 <img src='Vector (1).png' className='w-100 mx-auto my-12'/>
                 <h1 className='font-bold text-5xl text-center text-slate-500'>Transformez vos données brutes en <span className='bg-gradient-to-r
                 from-green-400/80 via-purple-800/90 to-blue-400 bg-clip-text text-transparent'>informations exploitables</span></h1>
@@ -81,7 +81,7 @@ const Login = () => {
                         Explorer
                     </button>
                 </Link>
-            </div>
+            </div> */}
             <div className="bg-[url('fond-login-radial2.png')] bg-cover bg-center min-h-screen flex items-center justify-center lg:m-0">
                 <div className='p-10 rounded-2xl bg-slate-500/20 backdrop-blur-2xl space-y-5 flex flex-col justify-center items-center'>
                     <img src='Sans_titre__1_-removebg-preview.png' className='w-80'/>
