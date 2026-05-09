@@ -94,7 +94,7 @@ const Login = () => {
                     {emailError ? <p className='text-red-500 m-0 font-bold'> {emailError} </p> : null}
 
                     <div className='flex items-center justify-around p-2 bg-slate-500/20 rounded-2xl w-full mb-2'>
-                        <label htmlFor="password" className='text-xl text-slate-500/80 font-bold'>Password : </label>
+                        <label htmlFor="password" className='text-xl text-slate-500/80 font-bold'>Password Professionel : </label>
                         <input value={password} type="password" placeholder='Votre mot de passe' className='p-2 border-b border-slate-300/20 rounded-xl
                         placeholder:text-slate-300/20 outline-0 text-slate-100/50' onChange={(e) => setPassword(e.target.value)}/>
                     </div>
