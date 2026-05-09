@@ -22,6 +22,11 @@ const StateGrid = () => {
 
   const [numberUser, setNumberUser] = useState(0)
 
+  const [uploadGet, setUploadGet] = useState(null)
+
+  const [supabaseData, setSupabaseData] = useState(null)
+
+
   useEffect(() =>{
     const fetchstate = () =>{
       fetch("http://127.0.0.1:8000/mikrotik",{
@@ -35,7 +40,7 @@ const StateGrid = () => {
           console.log(data.active_connect_now)
           localStorage.setItem("active_connections_now", JSON.stringify(data.active_connect_now))
           
-          const number_of_rows = localStorage.getItem("number_of_rows") ? JSON.parse(localStorage.getItem("number_of_rows")) : 0
+          const number_of_rows = localStorage.getItem("number_of_rows ") ? JSON.parse(localStorage.getItem("number_of_rows")) : 0
           setNumberUser(number_of_rows)
           let user_number = number_of_rows
 
@@ -64,14 +69,38 @@ const StateGrid = () => {
         .catch(err => console.log(err))
     }
 
-    console.log(state)
-    
+    const fileUrl = localStorage.getItem("csv_url")
+
+
+
+    const uploadFile = async () =>{
+
+      const responses = await fetch(fileUrl)
+      const blob = await responses.blob()
+
+      const formData = new FormData()
+      formData.append("file",blob,"report.csv")
+
+      const res = await fetch("http://127.0.0.1:8000/process",{
+        method : "POST",
+        body : formData,
+      })
+
+      const data = await res.json()
+      setSupabaseData(data)
+      console.log(data)
+    }
     fetchstate()
+    uploadFile()
+
+    const uploadInterval = setInterval(uploadFile,2000)
 
     const interval = setInterval(fetchstate, 5000)
 
-    return () => clearInterval(interval)
-
+    return () => {
+      clearInterval(interval)
+      clearInterval(uploadInterval)
+    }
   },[])
 
   
@@ -88,7 +117,7 @@ const StateGrid = () => {
   },
   {
     title : "All users",
-    value : `${numberUser || 0}`,
+    value : `${supabaseData?.number_of_rows}`,
     change : "+3.8%",
     icon : User2Icon,
     color : "bg-blue-500",
@@ -108,7 +137,7 @@ const StateGrid = () => {
   },
   {
     title : "Total now",
-    value : `${stats?.total_now || 0} Ar`,
+    value : `${supabaseData?.total_now || 0} Ar`,
     change : "-0.1%",
     icon : Server,
     color : "bg-yellow-500",

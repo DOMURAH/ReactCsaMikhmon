@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { StatsContext } from "../../StatsContext";
 import { useNavigate } from "react-router-dom";
 
+const DB_NAME = "my_csv_db"
+const DB_VERSION = 1
 
 export default function Upload() {
 
@@ -20,7 +22,6 @@ export default function Upload() {
 
   const uploadFile = async () =>{
 
-
     setLoading(true)
 
     const formData = new FormData()
@@ -32,17 +33,14 @@ export default function Upload() {
         credentials : "include",
         body : formData
       })
+ 
 
       const data = await res.json()
-      console.log(data)
+      console.log(data.file_url)
 
       setStats(data)
 
-      localStorage.setItem("stats", JSON.stringify(data)) 
-      localStorage.setItem("number_of_rows", JSON.stringify(data.number_of_rows))
-      localStorage.setItem("total_amount", JSON.stringify(data.total_all))
-      localStorage.setItem("total_now", JSON.stringify(data.total_now))
-      localStorage.setItem("user_by_upload", JSON.stringify(data.user_upload))
+      localStorage.setItem("csv_url",data.file_url)
 
       setTimeout(() =>{
         navigate("/dashboard")
