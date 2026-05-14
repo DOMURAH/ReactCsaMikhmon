@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 const OnlineUser = () => {
 
@@ -13,16 +14,29 @@ const OnlineUser = () => {
 
   return (
     <div>
-        <h1 className='text-3xl font-bold text-slate-500/80'>Active connections now</h1>
+        <motion.h1 
+        initial={{
+            opacity : 0,
+            x : -50
+        }}
+        animate={{
+            opacity : 1,
+            x : 0
+        }}
+        transition={{
+            duration : 0.5
+        }}
+        className='text-3xl font-bold text-slate-500/80 bg-linear-to-r from-gray-500/20 to-green-600 shadow-lg
+        bg-clip-text text-transparent'>Active connections now</motion.h1>
         <div className='mt-6 space-y-4'>
             <table className='border-collapse border border-slate-400 w-full text-center text-slate-300 text-sm rounded-lg overflow-hidden'>
                 <thead>
-                    <tr className='bg-slate-700/50 p-6 text-2xl font-bold'>
-                        <th className='text-center text-slate-400/80 p-2'>name</th>
-                        <th className='text-center text-slate-400/80'>profile</th>
-                        <th className='text-center text-slate-400/80'>uptime</th>
-                        <th className='text-center text-slate-400/80'>session-time-left</th>
-                        <th className='text-center text-slate-400/80'>Server</th>
+                    <tr className='bg-slate-700/20 p-6 text-2xl font-bold'>
+                        <th className='text-center p-2'>name</th>
+                        <th className='text-center'>profile</th>
+                        <th className='text-center'>uptime</th>
+                        <th className='text-center'>session-time-left</th>
+                        <th className='text-center'>Server</th>
                     </tr>
                 </thead>
                 <tbody>

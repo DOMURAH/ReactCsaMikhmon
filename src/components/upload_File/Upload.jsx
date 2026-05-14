@@ -3,6 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useContext } from "react";
 import { StatsContext } from "../../StatsContext";
 import { useNavigate } from "react-router-dom";
+import CountUp, { useCountUp } from "react-countup";
 
 const DB_NAME = "my_csv_db"
 const DB_VERSION = 1

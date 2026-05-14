@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form } from 'lucide-react'
 import Sidebar from './Sidebar.jsx'
 import Header from './Header.jsx'
@@ -6,19 +6,24 @@ import Dashboard from '../dashboard/Dashboard.jsx'
 import Users from '../dashboard/Users.jsx'
 import OnlineUser from '../dashboard/OnlineUser.jsx'
 import { createContext } from 'react'
+import Filtrage from '../Filtrage/Filtrage.jsx'
 
 const pageContext = createContext()
 
 const Home = () => {
 
-
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [currentPage, setCurrentPage] = useState('dashboard')
+  const [currentPage, setCurrentPage] = useState(() => {
+    return localStorage.getItem('currentPage') || 'dashboard'
+  })
+
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage)
+  }, [currentPage])
 
   return (
     <pageContext.Provider value={{ currentPage, setCurrentPage }}>
-      <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50
-        to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900
+      <div className='min-h-screen dark:bg-black/90 bg-gradient-to-br dark:from-black to-green-500/20 
         transition-all duration-500'>
           <div className='flex h-screen overflow-hidden'>
             <Sidebar 
@@ -34,6 +39,7 @@ const Home = () => {
                   {currentPage === "dashboard" && <Dashboard/>}
                   {currentPage === "all-users" && <Users/>}
                   {currentPage === "online" && <OnlineUser/>}
+                  {currentPage === "Filtrage" && <Filtrage/>}
                 </div>
               </main>
             </div>
