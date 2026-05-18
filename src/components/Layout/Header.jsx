@@ -3,6 +3,7 @@ import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { UserButton } from '@clerk/react'
 
 const Header = ({sidebarCollapsed,onToggleSidebar}) => {
   return (
@@ -113,7 +114,17 @@ const Header = ({sidebarCollapsed,onToggleSidebar}) => {
                     animate={{opacity : 1 , y : 0}}
                     transition={{duration : 2.5 , ease : "linear" , delay : 2}}
                 className='p-2 relative cursor-pointer rounded-xl dark:hover:bg-slate-300/10 hover:bg-slate-500/20 transition-all'>
-                    <Settings className='w-5 h-5 text-slate-500'/>
+                    <UserButton
+                    afterSignOutUrl="/"
+                    userProfileMode="modal"
+                    appearance={{
+                        elements: {
+                        avatarBox: 'w-14 h-14 rounded-full ring-2 ring-blue-500',
+                        userButtonPopoverCard: 'bg-slate-900 border border-slate-600 shadow-xl',
+                        userButtonPopoverActionButtonText: '!text-white',
+                        },
+                    }}
+                    />
                 </motion.button>
             </div>
         </div>

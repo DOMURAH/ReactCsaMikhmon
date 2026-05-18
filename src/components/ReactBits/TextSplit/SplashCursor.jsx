@@ -9,6 +9,8 @@ function SplashCursor({
   VELOCITY_DISSIPATION = 2,
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
+  TARGET_FPS = 60,
+  PIXEL_RATIO_MAX = null,
   CURL = 3,
   SPLAT_RADIUS = 0.2,
   SPLAT_FORCE = 6000,
@@ -46,6 +48,8 @@ function SplashCursor({
       VELOCITY_DISSIPATION,
       PRESSURE,
       PRESSURE_ITERATIONS,
+      TARGET_FPS,
+      PIXEL_RATIO_MAX,
       CURL,
       SPLAT_RADIUS,
       SPLAT_FORCE,
@@ -673,16 +677,32 @@ function SplashCursor({
     updateKeywords();
     initFramebuffers();
     let lastUpdateTime = Date.now();
+    let lastFrameTime = Date.now();
     let colorUpdateTimer = 0.0;
+    let rafId = null;
 
     function updateFrame() {
+      if (document.hidden) {
+        rafId = requestAnimationFrame(updateFrame);
+        return;
+      }
+
+      const now = Date.now();
+      const targetFps = config.TARGET_FPS || 60;
+      const minFrameMs = 1000 / targetFps;
+      if (now - lastFrameTime < minFrameMs) {
+        rafId = requestAnimationFrame(updateFrame);
+        return;
+      }
+      lastFrameTime = now;
+
       const dt = calcDeltaTime();
       if (resizeCanvas()) initFramebuffers();
       updateColors(dt);
       applyInputs();
       step(dt);
       render(null);
-      requestAnimationFrame(updateFrame);
+      rafId = requestAnimationFrame(updateFrame);
     }
 
     function calcDeltaTime() {
@@ -960,7 +980,9 @@ function SplashCursor({
     }
 
     function scaleByPixelRatio(input) {
-      const pixelRatio = window.devicePixelRatio || 1;
+      const deviceRatio = window.devicePixelRatio || 1;
+      const maxRatio = config.PIXEL_RATIO_MAX ?? deviceRatio;
+      const pixelRatio = Math.min(deviceRatio, maxRatio);
       return Math.floor(input * pixelRatio);
     }
 
@@ -1045,6 +1067,10 @@ function SplashCursor({
     });
 
     updateFrame();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,
@@ -1053,6 +1079,8 @@ function SplashCursor({
     VELOCITY_DISSIPATION,
     PRESSURE,
     PRESSURE_ITERATIONS,
+    TARGET_FPS,
+    PIXEL_RATIO_MAX,
     CURL,
     SPLAT_RADIUS,
     SPLAT_FORCE,
@@ -1065,8 +1093,8 @@ function SplashCursor({
   ]);
 
   return (
-    <div className="fixed top-0 left-0 z-50 pointer-events-none w-full h-full">
-      <canvas ref={canvasRef} id="fluid" className="w-screen h-screen block"></canvas>
+    <div className="fixed top-0 left-0 z-[2] pointer-events-none w-full h-full">
+      <canvas ref={canvasRef} id="fluid" className="w-full h-full block" />
     </div>
   );
 }
